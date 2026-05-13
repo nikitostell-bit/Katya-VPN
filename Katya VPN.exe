@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define LANG_RU 1
+#define LANG_EN 2
+
+int current_lang = LANG_RU;
+
+struct InterfaceText {
+    const char* title;
+    const char* menu_start;
+    const char* menu_stop;
+    const char* menu_status;
+    const char* menu_ai;
+    const char* menu_support;
+    const char* menu_meteor;
+    const char* menu_exit;
+    const char* menu_choice;
+    const char* vpn_starting;
+    const char* vpn_started;
+    const char* vpn_stopping;
+    const char* vpn_stopped;
+    const char* status_info;
+    const char* support_info;
+    const char* meteor_prompt;
+    const char* exit_msg;
+} txt;
+
+void set_language(int lang) {
+    current_lang = lang;
+    if (lang == LANG_RU) {
+        txt.title = "\n=== МЕНЮ KATYA VPN ===";
+        txt.menu_start = "1. Запустить Katya VPN";
+        txt.menu_stop = "2. Остановить Katya VPN";
+        txt.menu_status = "3. Статус соединения";
+        txt.menu_ai = "4. ИИ-помощник Corpilot";
+        txt.menu_support = "5. Техническая поддержка";
+        txt.menu_meteor = "6. Мониторинг метеоритов (Конец света)";
+        txt.menu_exit = "7. Выйти";
+        txt.menu_choice = "Выберите действие: ";
+        txt.vpn_starting = "\n[+] Запуск Katya VPN... Подключение к VLESS-Reality...\n";
+        txt.vpn_started = "[ОК] Соединение установлено. Защита активна.\n";
+        txt.vpn_stopping = "\n[-] Отключение от сервера Katya VPN...\n";
+        txt.vpn_stopped = "[ОК] VPN успешно остановлен.\n";
+        txt.status_info = "\n[i] Протокол: VLESS-XTLS\n[i] Сервер: Активен (127.0.0.1)\n[i] Пинг: 42 мс\n";
+        txt.support_info = "\n👨‍💻 ТЕХПОДДЕРЖКА: Напишите администратору в Telegram: t.me/KatyaVPN_Support\n";
+        txt.meteor_prompt = "Введите дистанцию до метеорита (км): ";
+        txt.exit_msg = "\nВыход из Katya VPN. До свидания!\n";
+    } else {
+        txt.title = "\n=== KATYA VPN MENU ===";
+        txt.menu_start = "1. Start Katya VPN";
+        txt.menu_stop = "2. Stop Katya VPN";
+        txt.menu_status = "3. Connection Status";
+        txt.menu_ai = "4. AI Assistant Corpilot";
+        txt.menu_support = "5. Technical Support";
+        txt.menu_meteor = "6. Meteor Monitoring (Apocalypse)";
+        txt.menu_exit = "7. Exit";
+        txt.menu_choice = "Select an option: ";
+        txt.vpn_starting = "\n[+] Starting Katya VPN... Connecting to VLESS-Reality...\n";
+        txt.vpn_started = "[OK] Connection established. Protection enabled.\n";
+        txt.vpn_stopping = "\n[-] Disconnecting from Katya VPN server...\n";
+        txt.vpn_stopped = "[OK] VPN stopped successfully.\n";
+        txt.status_info = "\n[i] Protocol: VLESS-XTLS\n[i] Server: Active (127.0.0.1)\n[i] Ping: 42 ms\n";
+        txt.support_info = "\n SUPPORT: Message the administrator on Telegram: t.me/KatyaVPN_Support\n";
+        txt.meteor_prompt = "Enter distance to meteor (km): ";
+        txt.exit_msg = "\nExiting Katya VPN. Goodbye!\n";
+    }
+}
+
+void run_meteor_check() {
+    long distance;
+    printf("\n%s", txt.meteor_prompt);
+    if (scanf("%ld", &distance) != 1) {
+        while(getchar() != '\n');
+        return;
+    }
+    if (distance > 10000) {
+        printf("[ СТАТУС: ЗЕЛЕНЫЙ ] Все хорошо. Метеорит далеко.\n");
+    } else if (distance >= 2000) {
+        printf("[ СТАТУС: ЖЕЛТЫЙ ] Уже плохо! Объявлена готовность.\n");
+    } else {
+        printf("[ СТАТУС: КРАСНЫЙ ] Очень плохо! Столкновение неизбежно!\n");
+    }
+}
+
+int main() {
+    int lang_choice = 0;
+    while (lang_choice != 1 && lang_choice != 2) {
+        printf("Select Language / Выберите язык:\n1) English\n2) Русский\nChoice: ");
+        if (scanf("%d", &lang_choice) != 1) { while(getchar() != '\n'); continue; }
+    }
+    set_language(lang_choice == 1 ? LANG_EN : LANG_RU);
+
+    int choice;
+    while (1) {
+        printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n======================\n%s", 
+               txt.title, txt.menu_start, txt.menu_stop, txt.menu_status, txt.menu_ai, txt.menu_support, txt.menu_meteor, txt.menu_exit, txt.menu_choice);
+        
+        if (scanf("%d", &choice) != 1) { while(getchar() != '\n'); continue; }
+
+        switch (choice) {
+            case 1: printf("%s%s", txt.vpn_starting, txt.vpn_started); break;
+            case 2: printf("%s%s", txt.vpn_stopping, txt.vpn_stopped); break;
+            case 3: printf("%s", txt.status_info); break;
+            case 4: printf("\n🤖 Corpilot: Recommended protocol: VLESS-Reality.\n"); break;
+            case 5: printf("%s", txt.support_info); break;
+            case 6: run_meteor_check(); break;
+            case 7: printf("%s", txt.exit_msg); return 0;
+        }
+    }
+    return 0;
+}
