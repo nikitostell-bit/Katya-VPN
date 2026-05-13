@@ -1,0 +1,14 @@
+name: Build Katya VPN EXE
+on: [push]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Compile EXE
+      run: gcc main.c -o Katya_VPN.exe
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Katya-VPN-Executable
+        path: Katya_VPN.exe
